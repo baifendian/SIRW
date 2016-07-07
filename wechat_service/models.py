@@ -14,9 +14,9 @@ class StockData(models.Model):
     close_price = models.DecimalField(max_digits=11, decimal_places=3)
     low_price = models.DecimalField(max_digits=11, decimal_places=3)
     volume = models.IntegerField()
-    pe = models.DecimalField(max_digits=6, decimal_places=2)
-    pb = models.DecimalField(max_digits=6, decimal_places=2)
-    dividend_rate = models.DecimalField(max_digits=5, decimal_places=2)
-    index_num = models.DecimalField(max_digits=10, decimal_places=2)
+    pe = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    pb = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    dividend_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    index_num = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
 
