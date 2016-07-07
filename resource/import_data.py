@@ -3,11 +3,13 @@
 
 import csv
 import datetime
-import django
-
-django.setup()
+import os
+import sys
 
 from wechat_service.models import StockInfo, StockData
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'wechat.settings'
+sys.path.append(os.path.dirname(__file__))
 
 def from_csv_to_db(filename='159915.csv', stock_name=u'创业板', stock_code='159915'):
 
