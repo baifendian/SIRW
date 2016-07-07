@@ -1,6 +1,8 @@
 # -*-coding:utf-8-*-
 from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
 from wechat.settings_config import *
 from wechat_sdk import WechatConf, WechatBasic
 from wechat_sdk.exceptions import ParseError
@@ -39,6 +41,10 @@ def wechat_index(request):
             "1": STOCK_MESSAGE,
             "2": show_history(),
             "3": show_help(),
+            "201": get_stock_history_info("510900"),
+            "202": get_stock_history_info("159920"),
+            "203": get_stock_history_info("510300"),
+            "204": get_stock_history_info("510500"),
         }
         reply_text = reply_text_dict.get(content, PROMPT_MESSAGE)
         response = wechat.response_text(content=reply_text)
@@ -50,4 +56,14 @@ def show_help():
 
 
 def show_history():
-    return "历史"
+    return HISTORY_MESSAGE
+
+
+def get_stock_history_info(stock_id):
+    return stock_id
+
+
+@require_GET
+def show_history_page(request):
+    stock_id = request.REQUEST.get("stock")
+    return render(request, "show_history.html", {"stock_id": stock_id})
