@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import csv
 import datetime
 import os
 import sys
+import django
+import csv
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wechat.settings")
+django.setup()
 
 from wechat_service.models import StockInfo, StockData
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'wechat.settings'
-sys.path.append(os.path.dirname(__file__))
-
 def from_csv_to_db(filename='159915.csv', stock_name=u'创业板', stock_code='159915'):
-
     with open(filename, 'r') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         first_row = True
