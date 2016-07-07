@@ -19,3 +19,4 @@ class StockData(models.Model):
     dividend_rate = models.DecimalField(max_digits=5, decimal_places=2)
     index_num = models.DecimalField(max_digits=10, decimal_places=2)
 
+
