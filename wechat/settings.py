@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'wechat_service'
+    'wechat_service',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (

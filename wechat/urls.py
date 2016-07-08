@@ -17,6 +17,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^wechat/$', 'wechat_service.views.wechat_index'),
-    url(r'^wechat/stock-history/$', 'wechat_service.views.show_history_page')
+    url(r'^wechat/$', include('wechat_service.urls')),
 ]
