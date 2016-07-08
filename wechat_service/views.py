@@ -7,6 +7,7 @@ from wechat.settings_config import *
 from wechat_sdk import WechatConf, WechatBasic
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage
+from .forms import SetRecordForm
 
 
 conf = WechatConf(
@@ -38,7 +39,8 @@ def wechat_index(request):
         content = message.content.strip().encode("utf-8")
         reply_text_dict = {
             "功能": FUNCTION_MESSAGE,
-            "1": STOCK_MESSAGE,
+           # "1": STOCK_MESSAGE,
+            "1": set_stock_record(),
             "2": show_history(),
             "3": show_help(),
             "201": get_stock_history_info("510900"),
@@ -62,8 +64,11 @@ def show_history():
 def get_stock_history_info(stock_id):
     return stock_id
 
+def set_stock_record(request):
+    form = SetRecordForm()
+    return render(request, 'wechat_service/stock_message.html', {'form': form})
 
 @require_GET
 def show_history_page(request):
     stock_id = request.REQUEST.get("stock")
-    return render(request, "show_history.html", {"stock_id": stock_id})
+    return render(request, "/wechat_service/show_history.html", {"stock_id": stock_id})
