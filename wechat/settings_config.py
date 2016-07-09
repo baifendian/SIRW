@@ -11,8 +11,8 @@ PROMPT_MESSAGE = "回复【功能】两个字查看支持的功能"
 
 # for wechat
 WECHAT_TOKEN = "test"
-WECHAT_APPID = "wxa9a580e0ad6fe79e"
-WECHAT_APPSECRET = "8eadd1185e1094108edea040020b1c26"
+WECHAT_APPID = "wx98eb477a2d43ead0"
+WECHAT_APPSECRET = "a6e8311590390642237fea7d79d4f181"
 WECHAT_ENCRYPT_MODE = "normal"
 ACCESS_TOKEN_REQUEST_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" \
                            "&appid=%s" \
