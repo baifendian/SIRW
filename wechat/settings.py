@@ -148,7 +148,13 @@ STATIC_URL = '/static/'
 
 
 BOOTSTRAP3 = {
-    'javascript_in_head': True
+    'javascript_in_head': True,
+    #'jquery_url': '//code.jquery.com/jquery.min.js',
+    'jquery_url': 'http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js',
+
+    # The Bootstrap base URL
+    #'base_url': '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/',
+    'base_url': 'http://cdn.bootcss.com/bootstrap/3.3.6/',
 }
 token = wechat_utils.get_token(ACCESS_TOKEN_REQUEST_URL)
 if token:
