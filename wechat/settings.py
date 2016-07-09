@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from settings_config import *
+from wechat_service import utils as wechat_utils
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -102,3 +104,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+token = wechat_utils.get_token(ACCESS_TOKEN_REQUEST_URL)
+if token:
+    url = GENERATE_MENU_URL % token
+    wechat_utils.generate_menu(url, GENERATE_MENU_DATA)

@@ -8,4 +8,5 @@ from . import views
 urlpatterns = [
     url(r'^$', views.wechat_index),
     url(r'^set/record/$', views.set_stock_record, name='set_record'),
+    url(r'^show-history/$', views.show_history_page)
 ]
