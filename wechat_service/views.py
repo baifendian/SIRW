@@ -113,10 +113,10 @@ def record_data(request):
                     current_date += datetime.timedelta(days=28)
             compute = Compute()
             results = compute.backTest(price_list, initial_price, 5 * initial_price, growth_factor, 0)
-            return_data = [{'data': [], 'name': 'month_input'},
-                           {'data': [], 'name': 'total_input'},
-                           {'data': [], 'name': 'total_value'},
-                           {'data': [], 'name': 'total_sell'},
+            return_data = [{'data': [], 'name': u'当月投入'},
+                           {'data': [], 'name': u'总投入'},
+                           {'data': [], 'name': u'总价值'},
+                           {'data': [], 'name': u'总卖出'},
                            ]
             for index in range(len(price_date)):
                 return_data[0]['data'].append([price_date[index], results[index][0]])
