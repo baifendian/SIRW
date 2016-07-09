@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  {% load staticfiles %}
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+	<meta name="Description" content="" />
+	<meta name="Keywords" content="关键词" />
+	<title>股票定投微信推送宝</title>
+</head>
+
+<body>
+
+  <a href="{% url 'backtrack_report' %}"> ceshi </a>
+	
+	<div class="p_bd">
+		<div class="grid_c1">
+
+			<!-- S 定投设置 -->
+			<div class="f f1" id="J_f1">
+				<h3 class="f_tit"><button id="dingtoubutton">定投设置</button></h3>
+				<div class="show"  style="display:none;" id="dingtoudiv">
+				起始金额：<input type="text" value="" id="qishijine"/>	   <br/>
+				增长系数：<input type="text" value="" id="zengzhangxishu"/>		<br/>
+				<input type="button" value="提交" id="dingtoushezhitijiao" onclick="show_reject()"/><br/>
+				</div>
+			</div>
+			<!-- E 定投设置 -->
+
+			<!-- S 回测 -->
+			<div class="f f1" id="J_f1">
+				<h3 class="f_tit"><button  id="dingtoubutton2">回测</button></h3>
+				<div class="show" style="display:none;" id="huicediv">
+
+				<div class="input-daterange input-group wd300 ml5" id="datepicker">
+					开始日期：<input type="text" class="form-control input-sm" id="start_day" value=""/>
+
+					结束日期：<input type="text" class="form-control input-sm" id="end_day"  value="" />
+				</div>
+
+
+				起始金额：<input type="text" value="" id="qishijine2"/>	   <br/>
+				增长系数：<input type="text" value="" id="zengzhangxishu2"/>		<br/>
+
+				<input type="button" value="提交" id="" onclick="show_reject2()"/>		 <br/>
+					
+				</div>
+			</div>
+			<!-- E 回测 -->
+
+			
+		</div>
+	</div>
+
+  <script src="{% static 'jquery-2.1.1.js'%}"></script>	
+  <script src="{% static 'bootstrap-datepicker.js' %}"></script>                  
+  <script src="{% static 'bootstrap-datepicker.zh-CN.min.js' %}"></script>                  
+	<script>
+	//定投设置
+	function show_reject() {
+		var data = {
+			"qishijine":$("#qishijine").val(),
+			"zengzhangxishu":$("#zengzhangxishu").val()
+		};
+		$.ajax({
+			type: "POST",
+			data: data,
+			url: 'http://test.baifendian.com/aa.py',
+			dataType: "json",
+			success: function (data) {
+				alert('ok');
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	}
+	//回测
+	function show_reject2() {
+		var data = {
+			"start_day":$("#start_day").val(),
+			"end_day":$("#end_day").val(),
+			"qishijine2":$("#qishijine2").val(),
+			"zengzhangxishu2":$("#zengzhangxishu2").val(),
+		};
+		$.ajax({
+			type: "POST",
+			data: data,
+			url: 'http://test.baifendian.com/aa.py',
+			dataType: "json",
+			success: function (data) {
+				alert('ok');
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	}
+
+	$(document).ready(function(){
+
+		$("#dingtoubutton").bind("click", function(e) {
+			$("#dingtoudiv").show();		
+			$("#huicediv").hide();		
+		});
+
+
+		$("#dingtoubutton2").bind("click", function(e) {
+			$("#dingtoudiv").hide();		
+			$("#huicediv").show();		
+		});
+
+		$('#datepicker').datepicker({
+			language: "zh-CN",
+			autoclose: true,
+			multidate: true,
+			multidateSeparator: ',',
+		}).on('hide',function(ev) {});
+	
+	});	
+	
+	</script>   
+
+</body>
+</html>

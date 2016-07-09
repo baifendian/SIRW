@@ -1,0 +1,10 @@
+{% extends 'wechat_service/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}功能{% endblock %}
+
+{% block content %}
+  {% bootstrap_button "定投设置" button_class="btn-primary set-record" %}
+  <div class="">
+  {% bootstrap_button "回测数据" button_class="btn-primary backtrack" %}
+{% endblock %}

@@ -7,5 +7,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.wechat_index),
-    url(r'^set/record/$', views.set_stock_record, name='set_record'),
+    url(r'^set/record/(?P<stock_id>[0-9]+)/$', views.set_stock_record, name='set_record'),
+    url(r'^stock/list/$', views.list_stock_info, name='list_stock'),
+    url(r'^backtrack/report/$', views.backtrack_report, name='backtrack_report'),
 ]
