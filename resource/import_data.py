@@ -14,11 +14,11 @@ django.setup()
 
 from wechat_service.models import StockInfo, StockData
 
-def from_csv_to_db(filename='159915.csv', stock_name=u'创业板', stock_code='159915'):
+def from_csv_to_db(filename='510900.csv', stock_name=u'H股ETF', stock_code='510900'):
     with open(filename, 'r') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         first_row = True
-        stock_model = StockInfo(name=stock_name, code=stock_code)
+        stock_model = StockInfo(name=stock_name, code=stock_code, date=datetime.date(2013, 3, 21))
         stock_model.save()
         for row in spamreader:
             if first_row:

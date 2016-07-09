@@ -7,14 +7,16 @@ from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
+from django.core.cache import cache
 from wechat.settings_config import *
 from wechat_sdk import WechatConf, WechatBasic
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage, EventMessage
-
+from .models import StockData, StockInfo, UserInfo, UserStockRecord
+from resource.Compute import Compute
 
 # this is logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('access_log')
 
 
 conf = WechatConf(
@@ -69,9 +71,6 @@ def wechat_index(request):
         return []
 
 
-
-
-
 def list_stock_info(request):
     return render(request, "wechat_service/stock_list.html")
 
@@ -79,30 +78,59 @@ def set_stock_record(request, stock_id):
     return render(request, "wechat_service/function.html", {"stock_id": stock_id})
 
 def backtrack_report(request):
-    data = [{'data': [['2013-01-01', 13], ['2013-02-01', 15]], 'name': 'input'},
-            {'data': [['2013-01-01', 19], ['2013-02-01', 11]], 'name': 'earnings'}]
+    data = cache.get('return_data')
     return render(request, "wechat_service/datatrack_reports.html", {"data": data})
 
 @csrf_exempt
 def record_data(request):
     try:
-        print request.GET
-        start_day = request.REQUEST.get('start_day')
-        end_day = request.REQUEST.get('end_day')
-        initial_price = request.REQUEST.get('qishijine2')
-        growth_factor = request.REQUEST.get('zengzhangxishu2')
-        stock_id = request.REQUEST.get('stock_id')
-        print start_day, end_day, initial_price, growth_factor, stock_id
-        print '######################################'
-        return HttpResponse(json.dumps([1]), content_type="application/json")
+        start_day = request.GET.get('start_day')
+        end_day = request.GET.get('end_day')
+        initial_price = int(float(request.GET.get('qishijine2')))
+        growth_factor = float(request.GET.get('zengzhangxishu2'))
+        stock_id = request.GET.get('stock_id')
+        stock_model = StockInfo.objects.get(code=stock_id)
+        start_day = datetime.datetime.strptime(start_day, '%Y-%m-%d').date()
+        if start_day < stock_model.date:
+            start_day = stock_model.date
+        end_day = datetime.datetime.strptime(end_day, '%Y-%m-%d').date()
+        if end_day > datetime.date.today():
+            end_day = datetime.date.today()
+        if initial_price < 100 or initial_price >= 1000000:
+            initial_price = 2000
+        if growth_factor < 0.01 or growth_factor >= 1:
+            growth_factor = 0.01
+        cur = stock_model.stockdata_set.filter(date__lte=end_day, date__gte=start_day).order_by('date')
+        if cur:
+            price_list = []
+            price_date = []
+            current_date = cur[0].date
+            for elem in cur:
+                if current_date <= elem.date:
+                    price_date.append(elem.date.strftime('%Y-%m-%d'))
+                    price_list.append(elem.close_price)
+                    #如何更好的找到下一个月的今天的前后几天？
+                    current_date += datetime.timedelta(days=28)
+            compute = Compute()
+            results = compute.backTest(price_list, initial_price, 5 * initial_price, growth_factor, 0)
+            return_data = [{'data': [], 'name': 'month_input'},
+                           {'data': [], 'name': 'total_input'},
+                           {'data': [], 'name': 'total_value'},
+                           {'data': [], 'name': 'total_sell'},
+                           ]
+            for index in range(len(price_date)):
+                return_data[0]['data'].append([price_date[index], results[index][0]])
+                return_data[1]['data'].append([price_date[index], results[index][2]])
+                return_data[2]['data'].append([price_date[index], results[index][1]+results[index][5]])
+                return_data[3]['data'].append([price_date[index], results[index][5]])
+            #logger.debug(return_data)
+            cache.set('return_data', return_data, 30)
+            return HttpResponse(json.dumps({'status': 'ok'}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({'status': 'no result'}), content_type="application/json")
+    except Exception as e:
+        #logger.debug(sys.exc_info())
+        logger.exception(e)
+        return HttpResponse(json.dumps({'status': 'error'}), content_type="application/json")
 
-    except:
-        logger.debug(sys.exc_info())
-        return render(request, "wechat_service/404.html")
 
-
-
-@require_GET
-def show_history_page(request):
-    stock_id = request.REQUEST.get("stock")
-    return render(request, "wechat_service/show_history.html", {"stock_id": stock_id})

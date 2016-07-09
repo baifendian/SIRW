@@ -103,22 +103,42 @@ USE_TZ = True
 # config for logger
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.getcwd() + '/wechat.log',
+    'disable_existing_loggers': True,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+
+        'complete': {
+            'format': '[%(levelname)s %(asctime)s @ %(process)d] (%(filename)s/%(funcName)s:%(lineno)d) - %(message)s'
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+
+    'handlers': {
+        'ac_file': {
+            'level':'DEBUG',
+            'class':'logging.FileHandler',
+            'formatter': 'complete',
+            'filename' : os.path.join(BASE_DIR, 'logs/service.log').replace('\\','/')
         },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'complete'
+        },
+    },
+
+    'loggers': {
+       'access_log': {
+           'handlers':['ac_file', 'console'],
+           'propagate': False,
+           'level':'DEBUG',
+       },
     },
 }
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -136,3 +156,10 @@ if token:
     wechat_utils.generate_menu(url, GENERATE_MENU_DATA)
     # url = POST_MESSAGE_URL % token
     # wechat_utils.post_message(url, POST_DATA_DICT)
+
+CACHES = {
+    'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'report_cache',
+        }
+}

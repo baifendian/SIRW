@@ -95,7 +95,7 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
 		<div class="grid_c1">
 
 			<!-- S 定投设置 -->
-			<div class="f f1" id="J_f1">
+			<div class="f f1" id="J_f1" style="display: none;">
 				<h3 class="f_tit"><button id="dingtoubutton">定投设置</button></h3>
 				<div class="show"  style="display:none;" id="dingtoudiv">
 				起始金额：<input type="text" value="" id="qishijine"/>	   <br/>
@@ -111,16 +111,17 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
 				<div class="show" style="display:none;" id="huicediv">
 
 				<div class="input-daterange input-group wd300 ml5" id="datepicker">
+          <label>eg:2016-01-02</label>
 					开始日期：<input id="start_day" type="date" value=""/>	  <br/>
-
 					结束日期：<input id="end_day" type="date" value=""/>		<br/>
 				</div>
-
-
+        <label>100~1000000</label>
 				起始金额：<input type="text" value="" id="qishijine2"/>	   <br/>
+        <label>0.01~1</label>
 				增长系数：<input type="text" value="" id="zengzhangxishu2"/>		<br/>
 
 				<input type="button" value="提交" id="" onclick="show_reject2()"/>		 <br/>
+        <label class='alter-label'></label>
 					
 				</div>
 			</div>
@@ -169,7 +170,15 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
       url: "{% url 'record_data' %}",
 			dataType: "json",
 			success: function (data) {
-				alert('ok');
+        if(data['status'] == 'ok')
+        {
+          window.location.href="{% url 'backtrack_report'%}"; 
+        }
+        else
+        {
+         $("#alter-label").text('error'); 
+			   $("#huicediv").hide();		
+        }
 			},
 			error: function (msg) {
 				console.log(msg);
