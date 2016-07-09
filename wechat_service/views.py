@@ -7,14 +7,14 @@ from django.views.decorators.http import require_GET
 from wechat.settings_config import *
 from wechat_sdk import WechatConf, WechatBasic
 from wechat_sdk.exceptions import ParseError
-from wechat_sdk.messages import TextMessage
+from wechat_sdk.messages import TextMessage, EventMessage
 
 
 conf = WechatConf(
-    token='test',
-    appid='wxa9a580e0ad6fe79e',
-    appsecret='8eadd1185e1094108edea040020b1c26',
-    encrypt_mode='normal'
+    token=WECHAT_TOKEN,
+    appid=WECHAT_APPID,
+    appsecret=WECHAT_APPSECRET,
+    encrypt_mode=WECHAT_ENCRYPT_MODE
 )
 wechat = WechatBasic(conf=conf)
 
@@ -22,7 +22,6 @@ wechat = WechatBasic(conf=conf)
 @csrf_exempt
 def wechat_index(request):
     try:
-        print request
         if request.method == 'GET':
             signature = request.GET.get('signature')
             timestamp = request.GET.get('timestamp')
@@ -38,35 +37,22 @@ def wechat_index(request):
         response = wechat.response_text(content=FOLLOW_MESSAGE)
         if isinstance(message, TextMessage):
             content = message.content.strip().encode("utf-8")
-            reply_text_dict = {
-                "功能": FUNCTION_MESSAGE,
-               # "1": STOCK_MESSAGE,
-                "1": list_stock_info(),
-                "2": show_history(),
-                "3": show_help(),
-                "201": get_stock_history_info("510900"),
-                "202": get_stock_history_info("159920"),
-                "203": get_stock_history_info("510300"),
-                "204": get_stock_history_info("510500"),
-            }
+            reply_text_dict = {}
+            reply_text = reply_text_dict.get(content, PROMPT_MESSAGE)
+            response = wechat.response_text(content=reply_text)
+        elif isinstance(message, EventMessage):
+            content = message.key
+            reply_text_dict = {}
             reply_text = reply_text_dict.get(content, PROMPT_MESSAGE)
             response = wechat.response_text(content=reply_text)
         return HttpResponse(response, content_type="application/xml")
-    except Exception as e:
+    except Exception, e:
         print sys.exc_info()
         return []
 
 
-def show_help():
-    return HELP_MESSAGE
 
 
-def show_history():
-    return HISTORY_MESSAGE
-
-
-def get_stock_history_info(stock_id):
-    return stock_id
 
 def list_stock_info(request):
     return render(request, "wechat_service/stock_list.html")
@@ -78,6 +64,7 @@ def backtrack_report(request):
     data = [{'data': [['2013-01-01', 13], ['2013-02-01', 15]], 'name': 'input'},
             {'data': [['2013-01-01', 19], ['2013-02-01', 11]], 'name': 'earnings'}]
     return render(request, "wechat_service/datatrack_reports.html", {"data": data})
+
 
 
 @require_GET

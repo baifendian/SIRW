@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import chartkick
+from settings_config import *
+from wechat_service import utils as wechat_utils
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -109,3 +110,7 @@ STATIC_URL = '/static/'
 BOOTSTRAP3 = {
     'javascript_in_head': True
 }
+token = wechat_utils.get_token(ACCESS_TOKEN_REQUEST_URL)
+if token:
+    url = GENERATE_MENU_URL % token
+    wechat_utils.generate_menu(url, GENERATE_MENU_DATA)
