@@ -2,7 +2,7 @@
 import datetime
 import sys
 import logging
-from django.http import Http404
+import json
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -83,20 +83,22 @@ def backtrack_report(request):
             {'data': [['2013-01-01', 19], ['2013-02-01', 11]], 'name': 'earnings'}]
     return render(request, "wechat_service/datatrack_reports.html", {"data": data})
 
+@csrf_exempt
 def record_data(request):
     try:
+        print request.GET
         start_day = request.REQUEST.get('start_day')
         end_day = request.REQUEST.get('end_day')
         initial_price = request.REQUEST.get('qishijine2')
         growth_factor = request.REQUEST.get('zengzhangxishu2')
         stock_id = request.REQUEST.get('stock_id')
         print start_day, end_day, initial_price, growth_factor, stock_id
+        print '######################################'
+        return HttpResponse(json.dumps([1]), content_type="application/json")
 
     except:
         logger.debug(sys.exc_info())
-        return Http404("error")
-
-
+        return render(request, "wechat_service/404.html")
 
 
 

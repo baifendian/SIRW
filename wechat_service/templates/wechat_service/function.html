@@ -162,10 +162,11 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
 			"zengzhangxishu2":$("#zengzhangxishu2").val(),
       "stock_id": {{ stock_id }},
 		};
+    var data2 = {};
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			data: data,
-			url: 'http://test.baifendian.com/aa.py',
+      url: "{% url 'record_data' %}",
 			dataType: "json",
 			success: function (data) {
 				alert('ok');
