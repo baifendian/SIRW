@@ -1,0 +1,18 @@
+{% extends 'wechat_service/base.html' %}
+{% load bootstrap3 %}
+{% load chartkick %}
+{% load staticfiles %}
+
+{% block title %}定投回溯{% endblock %}
+
+{% block content %}
+
+{% line_chart data %}
+
+{% endblock %}
+{% block bootstrap3_extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script> 
+<script src="{% static 'chartkick.js' %}"></script>
+{% endblock %}
+
+

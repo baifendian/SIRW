@@ -67,10 +67,20 @@ def wechat_index(request):
         return []
 
 
-def set_stock_record(request):
-    # form = SetRecordForm()
-    form = None
-    return render(request, 'wechat_service/stock_message.html', {'form': form})
+
+
+
+def list_stock_info(request):
+    return render(request, "wechat_service/stock_list.html")
+
+def set_stock_record(request, stock_id):
+    return render(request, "wechat_service/function.html")
+
+def backtrack_report(request):
+    data = [{'data': [['2013-01-01', 13], ['2013-02-01', 15]], 'name': 'input'},
+            {'data': [['2013-01-01', 19], ['2013-02-01', 11]], 'name': 'earnings'}]
+    return render(request, "wechat_service/datatrack_reports.html", {"data": data})
+
 
 
 @require_GET

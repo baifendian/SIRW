@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'wechat_service',
     'bootstrap3',
+    'chartkick',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,6 +127,10 @@ LOGGING = {
 
 STATIC_URL = '/static/'
 
+
+BOOTSTRAP3 = {
+    'javascript_in_head': True
+}
 token = wechat_utils.get_token(ACCESS_TOKEN_REQUEST_URL)
 if token:
     url = GENERATE_MENU_URL % token
