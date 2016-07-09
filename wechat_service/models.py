@@ -6,6 +6,7 @@ from django.db import models
 class StockInfo(models.Model):
     name = models.CharField(max_length=1024)
     code = models.CharField(max_length=20)
+    date = models.DateField(null=True, blank=True)
 
 
 class StockData(models.Model):
@@ -37,6 +38,7 @@ class UserStockRecord(models.Model):
     profit_ratio = models.DecimalField(max_digits=6, decimal_places=2)
     cash = models.IntegerField()
     pre_cal_value = models.IntegerField(null=True, blank=True)
+    pe = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 

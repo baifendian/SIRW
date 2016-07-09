@@ -1,6 +1,8 @@
 # -*-coding:utf-8-*-
+import datetime
 import sys
 import logging
+from django.http import Http404
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -74,12 +76,27 @@ def list_stock_info(request):
     return render(request, "wechat_service/stock_list.html")
 
 def set_stock_record(request, stock_id):
-    return render(request, "wechat_service/function.html")
+    return render(request, "wechat_service/function.html", {"stock_id": stock_id})
 
 def backtrack_report(request):
     data = [{'data': [['2013-01-01', 13], ['2013-02-01', 15]], 'name': 'input'},
             {'data': [['2013-01-01', 19], ['2013-02-01', 11]], 'name': 'earnings'}]
     return render(request, "wechat_service/datatrack_reports.html", {"data": data})
+
+def record_data(request):
+    try:
+        start_day = request.REQUEST.get('start_day')
+        end_day = request.REQUEST.get('end_day')
+        initial_price = request.REQUEST.get('qishijine2')
+        growth_factor = request.REQUEST.get('zengzhangxishu2')
+        stock_id = request.REQUEST.get('stock_id')
+        print start_day, end_day, initial_price, growth_factor, stock_id
+
+    except:
+        logger.debug(sys.exc_info())
+        return Http404("error")
+
+
 
 
 

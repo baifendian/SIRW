@@ -90,8 +90,6 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
 </style>
 
 <body>
-
-  <a href="{% url 'backtrack_report' %}"> ceshi </a>
 	
 	<div class="p_bd">
 		<div class="grid_c1">
@@ -162,6 +160,7 @@ body{margin:0 auto;min-width:320px;max-width:640px;height:100%;background:#fff;f
 			"end_day":$("#end_day").val(),
 			"qishijine2":$("#qishijine2").val(),
 			"zengzhangxishu2":$("#zengzhangxishu2").val(),
+      "stock_id": {{ stock_id }},
 		};
 		$.ajax({
 			type: "POST",
