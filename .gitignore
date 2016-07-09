@@ -91,6 +91,5 @@ ENV/
 .ropeproject
 
 .idea/
-*.pyc
 *.sqlite3
 migrations/

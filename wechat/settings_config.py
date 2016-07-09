@@ -24,7 +24,7 @@ GENERATE_MENU_DATA = {
         {
             "type": "view",
             "name": "查看指数",
-            "url": "http://www.duixueqiu.xyz/wechat/stock-history/?stock=159920"
+            "url": "http://www.duixueqiu.xyz/wechat/stock/list/"
         },
         {
             "type": "view",
