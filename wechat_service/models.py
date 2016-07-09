@@ -2,9 +2,11 @@ from django.db import models
 
 # Create your models here.
 
+
 class StockInfo(models.Model):
     name = models.CharField(max_length=1024)
     code = models.CharField(max_length=20)
+
 
 class StockData(models.Model):
     stock = models.ForeignKey(StockInfo)

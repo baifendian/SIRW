@@ -1,5 +1,6 @@
 # -*-coding:utf-8-*-
 import sys
+import logging
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -8,6 +9,10 @@ from wechat.settings_config import *
 from wechat_sdk import WechatConf, WechatBasic
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage, EventMessage
+
+
+# this is logger
+logger = logging.getLogger(__name__)
 
 
 conf = WechatConf(
@@ -21,6 +26,12 @@ wechat = WechatBasic(conf=conf)
 
 @csrf_exempt
 def wechat_index(request):
+    """WeChat interface, most logic in this method
+
+    :param request: the request from WeChat mobile client
+    :return: XML response
+
+    """
     try:
         if request.method == 'GET':
             signature = request.GET.get('signature')
@@ -32,22 +43,27 @@ def wechat_index(request):
         try:
             wechat.parse_data(data=request.body)
         except ParseError:
+            logger.error("wechat parse data error!")
             return HttpResponseBadRequest('Invalid XML Data')
         message = wechat.get_message()
         response = wechat.response_text(content=FOLLOW_MESSAGE)
+        reply_text_dict = {
+            "功能": FUNCTION_MESSAGE,
+            "3+1": POWER_INTRODUCTION,
+            "3+2": RECORD_INTRODUCTION
+        }
         if isinstance(message, TextMessage):
             content = message.content.strip().encode("utf-8")
-            reply_text_dict = {}
             reply_text = reply_text_dict.get(content, PROMPT_MESSAGE)
             response = wechat.response_text(content=reply_text)
         elif isinstance(message, EventMessage):
             content = message.key
-            reply_text_dict = {}
             reply_text = reply_text_dict.get(content, PROMPT_MESSAGE)
             response = wechat.response_text(content=reply_text)
         return HttpResponse(response, content_type="application/xml")
     except Exception, e:
-        print sys.exc_info()
+        logger.error(sys.exc_info())
+        logger.error("wechat index error: %s" % str(e))
         return []
 
 
