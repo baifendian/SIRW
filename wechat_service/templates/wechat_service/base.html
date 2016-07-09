@@ -1,0 +1,12 @@
+{% extends 'wechat_service/bootstrap.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_content %}
+    <div class="container">
+        <h1>{% block title %}{% endblock %}</h1>
+
+        {% block content %}{% endblock %}
+    </div>
+
+{% endblock %}
