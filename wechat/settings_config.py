@@ -17,7 +17,6 @@ WECHAT_ENCRYPT_MODE = "normal"
 ACCESS_TOKEN_REQUEST_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" \
                            "&appid=%s" \
                            "&secret=%s" % (WECHAT_APPID, WECHAT_APPSECRET)
-POST_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=%s"
 GENERATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"
 GENERATE_MENU_DATA = {
     "button": [
@@ -37,4 +36,15 @@ GENERATE_MENU_DATA = {
             "key": "功能"
         }
     ]
+}
+DELAY_DAYS = 0
+POST_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=%s"
+POST_DATA_DICT = {
+    "filter": {
+        "is_to_all": True
+    },
+    "text": {
+        "content": "尊敬的用户您好,友情提示,您本月是否需要股票定投呢?如果需要,不要忘记奥~~~"
+    },
+    "msgtype": "text"
 }

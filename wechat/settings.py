@@ -12,16 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import djcelery
 from settings_config import *
 from wechat_service import utils as wechat_utils
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# config for celery
-djcelery.setup_loader()
-BROKER_URL = 'django://'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -47,8 +41,6 @@ INSTALLED_APPS = (
     'wechat_service',
     'bootstrap3',
     'chartkick',
-    'djcelery',
-    'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -142,3 +134,5 @@ token = wechat_utils.get_token(ACCESS_TOKEN_REQUEST_URL)
 if token:
     url = GENERATE_MENU_URL % token
     wechat_utils.generate_menu(url, GENERATE_MENU_DATA)
+    # url = POST_MESSAGE_URL % token
+    # wechat_utils.post_message(url, POST_DATA_DICT)
